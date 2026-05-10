@@ -5,8 +5,68 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CyberSecurityAwarenessBotGUI"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
+        Title="Cyber Security Awareness Bot" Height="540" Width="900" MinWidth="700" MinHeight="450">
 
-    </Grid>
+    <DockPanel>
+        <!-- Top bar -->
+        <Border DockPanel.Dock="Top" Background="#FF1F2937" Height="48">
+            <DockPanel>
+                <Button x:Name="SidebarToggleButton" Width="31" Height="33" Margin="6" Padding="0" Click="SidebarToggleButton_Click" BorderBrush="{x:Null}" Background="{x:Null}">
+                    <TextBlock Text="☰" Foreground="White" FontSize="16"/>
+                </Button>
+                <TextBlock Text="Cyber Security Awareness Bot" VerticalAlignment="Center" Foreground="White" FontSize="16" Margin="8,0"/>
+            </DockPanel>
+        </Border>
+
+        <!-- Main content -->
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition x:Name="LeftColumn" Width="240"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- Left sidebar -->
+            <Border x:Name="LeftPanel" Grid.Column="0" Background="#FFF" BorderBrush="#FFE6EEF5" BorderThickness="0,0,1,0">
+                <StackPanel Margin="10">
+                    <TextBox x:Name="SearchBox" Height="28" Margin="0,0,0,8" />
+                    <TextBlock Text="Conversations" Margin="0,4" FontWeight="SemiBold" />
+                    <ListBox x:Name="ConversationList" Height="130" Panel.ZIndex="0" MaxHeight="130" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto">
+                        
+                    </ListBox>
+                    <Button Content="New Conversation" Height="30" Margin="0,8,0,0"/>
+                </StackPanel>
+            </Border>
+
+            <!-- Chat area -->
+            <Grid Grid.Column="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <Border Background="#FFF" BorderBrush="#FFE6EEF5" BorderThickness="0,0,0,1" Padding="10">
+                    <StackPanel Orientation="Horizontal">
+                        <Ellipse Width="36" Height="36" Fill="#FF3B82F6"/>
+                        <StackPanel Margin="8,0">
+                            <TextBlock Text="Security Bot" FontWeight="SemiBold"/>
+                            <TextBlock Text="Active" FontSize="11" Foreground="#FF6B7280"/>
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+
+                <!-- Messages list (simple, populated from code-behind) -->
+                <ListBox x:Name="MessagesList" Grid.Row="1" Background="#FFF8FAFC" BorderThickness="0" Padding="8"/>
+
+                <!-- Input -->
+                <Border Grid.Row="2" Background="#FFF" BorderBrush="#FFE6EEF5" BorderThickness="1,1,0,0" Padding="8" Grid.ColumnSpan="1">
+                    <DockPanel>
+                        <TextBox x:Name="InputTextBox" AcceptsReturn="True" Width="545" MinHeight="36" Margin="0,0,8,0" KeyDown="InputTextBox_KeyDown" VerticalContentAlignment="Center"/>
+                        <Button x:Name="SendButton" Content="Send" Width="74" Height="36" Click="SendButton_Click"/>
+                    </DockPanel>
+                </Border>
+            </Grid>
+        </Grid>
+    </DockPanel>
+
 </Window>
