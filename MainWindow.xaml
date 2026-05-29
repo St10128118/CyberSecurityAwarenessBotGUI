@@ -15,10 +15,15 @@
                     <TextBlock Text="☰" Foreground="White" FontSize="16"/>
                 </Button>
                 <TextBlock Text="Cyber Security Awareness Bot" VerticalAlignment="Center" Foreground="White" FontSize="16" Margin="8,0"/>
-                <!-- Exit button on the right -->
-                <Button x:Name="ExitButton" DockPanel.Dock="Right" Width="84" Height="32" Margin="8" VerticalAlignment="Center" Click="ExitButton_Click">
-                    <TextBlock Text="Exit" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                </Button>
+                <!-- Memory manager and Exit buttons on the right -->
+                <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" VerticalAlignment="Center" Margin="8,0">
+                    <Button x:Name="MemoryButton" Width="36" Height="32" Margin="0,0,6,0" Click="MemoryButton_Click">
+                        <TextBlock Text="🧠" FontSize="14" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Button>
+                    <Button x:Name="ExitButton" Width="84" Height="32" Click="ExitButton_Click">
+                        <TextBlock Text="Exit" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Button>
+                </StackPanel>
             </DockPanel>
         </Border>
 
@@ -32,11 +37,12 @@
             <!-- Left sidebar -->
             <Border x:Name="LeftPanel" Grid.Column="0" Background="#FFF" BorderBrush="#FFE6EEF5" BorderThickness="0,0,1,0">
                 <StackPanel Margin="10">
-                    <TextBox x:Name="SearchBox" Height="28" Margin="0,0,0,8" />
                     <TextBlock Text="Conversations" Margin="0,4" FontWeight="SemiBold" />
                     <ListBox x:Name="ConversationList" Height="130" Panel.ZIndex="0" MaxHeight="130" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto" SelectionChanged="ConversationList_SelectionChanged">
 
                     </ListBox>
+                    <TextBlock Text="History" Margin="0,8,0,4" FontWeight="SemiBold" />
+                    <ListBox x:Name="HistoryList" Height="120" Panel.ZIndex="0" MaxHeight="120" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto" SelectionChanged="HistoryList_SelectionChanged" />
                     <Button x:Name="NewConversationButton" Content="New Conversation" Height="30" Margin="0,8,0,0" Click="NewConversationButton_Click"/>
                 </StackPanel>
             </Border>
@@ -51,7 +57,11 @@
 
                 <Border Background="#FFF" BorderBrush="#FFE6EEF5" BorderThickness="0,0,0,1" Padding="10">
                     <StackPanel Orientation="Horizontal">
-                        <Ellipse Width="36" Height="36" Fill="#FF3B82F6"/>
+                        <Grid Width="36" Height="36">
+                            <Ellipse Fill="#FF3B82F6"/>
+                            <!-- simple bot icon using emoji which designer can render -->
+                            <TextBlock Text="🤖" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Grid>
                         <StackPanel Margin="8,0">
                             <TextBlock Text="Security Bot" FontWeight="SemiBold"/>
                             <TextBlock Text="Active" FontSize="11" Foreground="#FF6B7280"/>

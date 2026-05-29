@@ -12,6 +12,9 @@ namespace CyberSecurityAwarenessBotGUI
         {
             InitializeComponent();
             WindowStyle = WindowStyle.None;
+            // ensure the window opens centered and above other windows
+            this.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+            this.Topmost = true;
         }
     }
 }
