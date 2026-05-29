@@ -1,0 +1,117 @@
+﻿<Window x:Class="CyberSecurityAwarenessBotGUI.Start_Up"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:CyberSecurityAwarenessBotGUI"
+        mc:Ignorable="d"
+        Title="Start_Up" Height="450" Width="800">
+    <Grid>
+        <!-- 
+            HOME GRID
+            This grid serves as the main landing page  of the application.
+            It contains a logo for AI , a welcome message to greet users,
+            and a navigation button to proceed to the next section.
+            Currently hidden by default.
+        -->
+        <Grid x:Name="home_grid" Visibility="Visible">
+
+            <!-- Logo -->
+            <Image 
+                Source="/CSB_logo.png"
+                Margin="124,-24,124,217"
+                   >
+                <Image.Style>
+                    <Style/>
+                </Image.Style>
+                <Image.CacheMode>
+                    <BitmapCache/>
+                </Image.CacheMode>
+            </Image>
+            <!-- welcome message-->
+            <TextBlock
+                Text="Welcome to AI chatbot, click continue button"
+                Height="20"
+                Width="270"
+                TextAlignment="Center"
+                Margin="265,265,265,149"
+                FontFamily="Arial Rounded MT Bold"
+                />
+            
+            <!-- button to continue-->
+            <Button 
+                Height="40"
+                Width="300"
+                Margin="0,200,0,0"
+                Content="Continue"
+                Click="proceed"
+                />
+
+        </Grid>
+
+        <!-- 
+            USERNAME GRID
+            This grid is for prompting the user for username.
+            It contains a logo for AI, a textbox for users to enter their name,
+            and a submit button to save the username.
+            Hidden .
+        -->
+        <Grid x:Name="username_grid" Visibility="Hidden">
+
+
+            <!-- Logo -->
+            <Image 
+                Source="/CSB_logo.png"
+                Margin="124,-24,124,217"
+                >
+                <Image.Style>
+                    <Style/>
+                </Image.Style>
+                <Image.CacheMode>
+                    <BitmapCache/>
+                </Image.CacheMode>
+            </Image>
+            <!-- Hint message-->
+            <TextBlock
+                Text="Enter username"
+                Height="20"
+                Width="270"
+                TextAlignment="Left"
+                Margin="0,30,0,0"
+                FontFamily="Arial Rounded MT Bold"
+                />
+
+            <!-- Enter/Prompt username-->
+            <TextBox
+                Height="40"
+                Width="270"
+                TextAlignment="Left"
+                Margin="0,100,0,0"
+                FontFamily="Arial Rounded MT Bold"
+                x:Name="usernames_input"
+                />
+
+            <!-- error message-->
+            <TextBlock
+             Text="please enter username to continue..."
+             Height="20"
+             Width="270"
+             TextAlignment="Justify"
+             Margin="0,180,0,0"
+             Foreground="Blue"
+             FontFamily="Arial Rounded MT Bold"
+             />
+
+            <!-- button to submit name-->
+            <Button 
+                Height="40"
+                Width="270"
+                Margin="0,250,0,0"
+                Content="submit username"
+                Click="submit_name"
+            />
+
+        </Grid>
+
+    </Grid>
+</Window>

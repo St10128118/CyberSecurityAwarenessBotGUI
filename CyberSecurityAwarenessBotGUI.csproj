@@ -8,4 +8,29 @@
     <UseWPF>true</UseWPF>
   </PropertyGroup>
 
+  <ItemGroup>
+    <None Remove="CSB_logo.png" />
+    <None Remove="cybersec bot logo.png.png" />
+    <None Remove="greeting.wav" />
+    <None Remove="greeting_audio.wav" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="greeting.wav">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="greeting_audio.wav">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.Windows.Extensions" Version="10.0.8" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="CSB_logo.png" />
+    <Resource Include="cybersec bot logo.png.png" />
+  </ItemGroup>
+
 </Project>
