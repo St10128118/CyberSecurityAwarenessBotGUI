@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CyberSecurityAwarenessBotGUI"
         mc:Ignorable="d"
-        Title="Cyber Security Awareness Bot" Height="540" Width="900" MinWidth="700" MinHeight="450">
+        Title="Cyber Security Awareness Bot" Height="570" Width="890" MinWidth="890" MinHeight="570">
 
     <DockPanel>
         <!-- Top bar -->
@@ -15,6 +15,10 @@
                     <TextBlock Text="☰" Foreground="White" FontSize="16"/>
                 </Button>
                 <TextBlock Text="Cyber Security Awareness Bot" VerticalAlignment="Center" Foreground="White" FontSize="16" Margin="8,0"/>
+                <!-- Exit button on the right -->
+                <Button x:Name="ExitButton" DockPanel.Dock="Right" Width="84" Height="32" Margin="8" VerticalAlignment="Center" Click="ExitButton_Click">
+                    <TextBlock Text="Exit" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                </Button>
             </DockPanel>
         </Border>
 
@@ -30,10 +34,10 @@
                 <StackPanel Margin="10">
                     <TextBox x:Name="SearchBox" Height="28" Margin="0,0,0,8" />
                     <TextBlock Text="Conversations" Margin="0,4" FontWeight="SemiBold" />
-                    <ListBox x:Name="ConversationList" Height="130" Panel.ZIndex="0" MaxHeight="130" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto">
-                        
+                    <ListBox x:Name="ConversationList" Height="130" Panel.ZIndex="0" MaxHeight="130" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto" SelectionChanged="ConversationList_SelectionChanged">
+
                     </ListBox>
-                    <Button Content="New Conversation" Height="30" Margin="0,8,0,0"/>
+                    <Button x:Name="NewConversationButton" Content="New Conversation" Height="30" Margin="0,8,0,0" Click="NewConversationButton_Click"/>
                 </StackPanel>
             </Border>
 
@@ -60,10 +64,30 @@
 
                 <!-- Input -->
                 <Border Grid.Row="2" Background="#FFF" BorderBrush="#FFE6EEF5" BorderThickness="1,1,0,0" Padding="8" Grid.ColumnSpan="1">
-                    <DockPanel>
-                        <TextBox x:Name="InputTextBox" AcceptsReturn="True" Width="545" MinHeight="36" Margin="0,0,8,0" KeyDown="InputTextBox_KeyDown" VerticalContentAlignment="Center"/>
-                        <Button x:Name="SendButton" Content="Send" Width="74" Height="36" Click="SendButton_Click"/>
-                    </DockPanel>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+
+                        <TextBox x:Name="InputTextBox"
+                                 Grid.Column="0"
+                                 AcceptsReturn="True"
+                                 MinHeight="36"
+                                 Margin="0,0,8,0"
+                                 KeyDown="InputTextBox_KeyDown"
+                                 VerticalContentAlignment="Center"
+                                 HorizontalAlignment="Stretch"
+                                 TextWrapping="Wrap"/>
+
+                        <Button x:Name="SendButton"
+                                Grid.Column="1"
+                                Content="Send"
+                                Height="36"
+                                Width="50"
+                                Margin="0,0,0,0"
+                                Click="SendButton_Click"/>
+                    </Grid>
                 </Border>
             </Grid>
         </Grid>

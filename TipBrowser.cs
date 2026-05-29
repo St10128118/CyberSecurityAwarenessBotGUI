@@ -12,15 +12,20 @@ namespace CybersecurityAwarenessBot
                     "Use at least 12 characters in your password.",
                     "Mix uppercase, lowercase, numbers, and symbols.",
                     "Never reuse the same password across multiple accounts.",
-                    "Consider using a password manager to generate and store strong passwords."
+                    "A password manager can make strong passwords much easier to manage.",
+                    "Try passphrases instead of short passwords — they're safer and easier to remember.",
+                    "Enable multi-factor authentication whenever possible."
                 }
             },
             { "phishing", new List<string>()
                 {
-                    "Be cautious of emails asking for urgent action.",
+                    "Be cautious of emails asking for passwords or urgent action.",
                     "Check the sender’s email address carefully.",
                     "Don’t click on suspicious links or attachments.",
-                    "Verify requests by contacting the organization directly."
+                    "Verify requests by contacting the organization directly.",
+                    "Phishing emails often create urgency to trick people into acting fast.",
+                    "Check the sender address carefully — attackers often imitate trusted companies.",
+
                 }
             },
             { "safe browsing", new List<string>()
@@ -35,6 +40,8 @@ namespace CybersecurityAwarenessBot
                 {
                     "Install antivirus software and keep it updated.",
                     "Avoid downloading files from untrusted sources.",
+                    "Malware often spreads through suspicious attachments or unsafe downloads.",
+                    "Regularly back up important data to recover from potential infections.",
                     "Keep your operating system and applications patched.",
                     "Be cautious of free software that may bundle unwanted programs."
                 }
@@ -44,7 +51,9 @@ namespace CybersecurityAwarenessBot
                     "Avoid using public Wi-Fi for sensitive transactions.",
                     "Use a VPN when connecting to unsecured networks.",
                     "Change default router passwords.",
-                    "Enable WPA3 or WPA2 encryption on your home Wi-Fi."
+                    "Enable WPA3 or WPA2 encryption on your home Wi-Fi.",
+                    "Public Wi-Fi can be a hotspot for attackers — use a VPN to encrypt your connection.",
+                    "Always change default passwords on your router to prevent unauthorized access."
                 }
             },
             { "windows updates", new List<string>()
@@ -52,7 +61,9 @@ namespace CybersecurityAwarenessBot
                     "Enable automatic updates for your operating system.",
                     "Regularly update browsers and plugins.",
                     "Patch vulnerabilities quickly to reduce risk.",
-                    "Outdated software is a common attack vector."
+                    "Outdated software is a common attack vector.",
+                    "Enable automatic updates to ensure you get the latest security patches.",
+                    "Keep all your software updated — attackers often target known vulnerabilities in outdated programs."
                 }
             },
             { "mobile security", new List<string>()
@@ -60,40 +71,31 @@ namespace CybersecurityAwarenessBot
                     "Install apps only from official stores.",
                     "Review app permissions before installing.",
                     "Enable device encryption and screen lock.",
-                    "Keep your mobile OS updated."
+                    "Keep your mobile OS updated.",
+                    "Be cautious of apps that request excessive permissions.",
+                    "Use a strong screen lock and enable encryption on your mobile device to protect your data."
                 }
             }
         };
 
         public static bool HasTopic(string topic) => tips.ContainsKey(topic);
 
-        public static void BrowseTips(string topic, string userName)
+        public static string BrowseTips(string topic, string userName)
         {
-            var topicTips = tips[topic];
-            int index = 0;
-
-            Console.WriteLine();
-            Console.WriteLine($"CyberSec Bot: Okay {userName}, here are some tips about {topic}.");
-            Console.WriteLine("Use N for next, P for previous, Q to quit tips.");
-
-            while (true)
+            if (!tips.ContainsKey(topic))
             {
-                Console.WriteLine();
-                Console.WriteLine($"Tip {index + 1}/{topicTips.Count}: {topicTips[index]}");
-                Console.WriteLine();
-
-                Console.Write("Command (N/P/Q): ");
-                string? cmd = Console.ReadLine()?.ToLower();
-
-                if (cmd == "n" && index < topicTips.Count - 1)
-                    index++;
-                else if (cmd == "p" && index > 0)
-                    index--;
-                else if (cmd == "q" || cmd == "quit")
-                    break;
+                return $"Sorry {userName}, I don't seems to have anytips on that topic. " +
+                    $"Please choose any topic from this list: {string.Join(", ", tips.Keys)}.";
             }
-            Console.WriteLine();
-            Console.WriteLine($"CyberSec Bot: Done with {topic} tips. Back to interactive mode!");
+            var topicTips = tips[topic];
+            string tip = $"Tip 1/{topicTips.Count}: {topicTips[0]}\n";
+            for (int i = 1; i < topicTips.Count; i++)
+            {
+                tip += $"Tip {i + 1}/{topicTips.Count}: {topicTips[i]}\n";
+            }
+            tip += $"This is all you need to know regarding the topic of {topic}.\n";
+            tip += $"Feel free to ask about another topic or ask me anything else, {userName}!";
+            return tip;
         }
 
         internal static List<string> GetTipCategories()

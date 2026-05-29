@@ -1,8 +1,8 @@
 ﻿using CybersecurityAwarenessBot;
+using CyberSecurityAwarenessBot;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using System.Windows.Media;
 
 namespace CyberSecurityAwarenessBotGUI
 {
@@ -12,13 +12,16 @@ namespace CyberSecurityAwarenessBotGUI
     public partial class MainWindow : Window
     {
         private double _sidebarWidth = 240;
+        private string userName;
 
-        public MainWindow()
+        public MainWindow(string _username)
         {
+            userName = _username;
             InitializeComponent();
+            WindowState = WindowState.Maximized;
 
-            // Example welcome message
-            AddMessage("Hello — I'm your Cyber Security Awareness Bot. Ask me anything about security best practices.", false);
+            // Initial welcome message by the bot using the Actions class method AddMessage.
+            Actions.AddMessage($"Hello! {userName}! Welcome to the Cybersecurity Awareness Bot. I'm here to help you stay safe online.", false, MessagesList);
 
             // populate ConversationList with keys from TipBrowser's dictionary of tips
             PopulateConversationList();
@@ -62,49 +65,30 @@ namespace CyberSecurityAwarenessBotGUI
                 return;
 
             // add user message
-            AddMessage(text, true);
+            Actions.AddMessage(text, true, MessagesList);
             InputTextBox.Clear();
 
-            // small delay to simulate processing
-            await Task.Delay(400);
+            // simulate processing delay
+            await Actions.SimulateProcessingDelayAsync();
 
-            // placeholder bot reply - replace with real bot integration
+            // get bot reply (GenerateBotReply now also handles exit confirmation)
             var botReply = GenerateBotReply(text);
-            AddMessage(botReply, false);
+            if (!string.IsNullOrEmpty(botReply))
+            {
+                Actions.AddMessage(botReply, false, MessagesList);
+            }
         }
 
-        private void AddMessage(string text, bool isUser)
+        private bool IsExitCommand(string text)
         {
-            // create a simple bubble: Border containing a TextBlock
-            var tb = new TextBlock
-            {
-                Text = text,
-                TextWrapping = TextWrapping.Wrap,
-                Foreground = new SolidColorBrush(Color.FromRgb(17, 24, 39)),
-                MaxWidth = 520,
-                HorizontalAlignment = isUser ? HorizontalAlignment.Right : HorizontalAlignment.Left
+            if (string.IsNullOrWhiteSpace(text))
+                return false;
 
-            };
+            var lower = text.ToLowerInvariant();
+            // common farewell/exit phrases
+            var exitPhrases = new[] { "exit", "quit", "goodbye", "good bye", "bye", "bye bye", "see you later", "see you", "farewell" };
 
-            var border = new Border
-            {
-                Child = tb,
-                Padding = new Thickness(10),
-                CornerRadius = new CornerRadius(8),
-                Margin = new Thickness(4),
-                Background = isUser ? new SolidColorBrush(Color.FromRgb(220, 248, 198)) : new SolidColorBrush(Color.FromRgb(241, 245, 249)),
-            };
-            MessagesList.Items.Add(border);
-            ScrollToEnd();
-        }
-
-        private void ScrollToEnd()
-        {
-            if (MessagesList.Items.Count == 0)
-                return;
-
-            var last = MessagesList.Items[MessagesList.Items.Count - 1];
-            MessagesList.Dispatcher.InvokeAsync(() => MessagesList.ScrollIntoView(last));
+            return exitPhrases.Any(p => lower.Contains(p));
         }
 
         // Populate the ConversationList ListBox with the keys of the tips dictionary found on TipBrowser.
@@ -121,20 +105,86 @@ namespace CyberSecurityAwarenessBotGUI
             }
         }
 
-        // Very simple placeholder response generator; replace with your bot or service call.
+        // Bot reply generation method - for now it checks if the user message matches a tip category and if so, it calls the TipBrowser.BrowseTips method to start browsing tips for that category.
+        // Otherwise, it uses the BotResponses.GetBotResponse method to get a response based on the user input.
         private string GenerateBotReply(string userMessage)
         {
-            if (string.IsNullOrWhiteSpace(userMessage))
-                return "Could you rephrase that?";
+            if (IsExitCommand(userMessage))
+            {
+                var result = MessageBox.Show(
+                    "Are you sure you want to exit?",
+                    "Confirm Exit",
+                    MessageBoxButton.YesNo,
+                    MessageBoxImage.Question);
 
-            var lower = userMessage.ToLowerInvariant();
-            if (lower.Contains("phish") || lower.Contains("email"))
-                return "Phishing indicators include urgent requests, unknown senders, and suspicious links. Don't click links—hover to inspect them and verify sender.";
-            if (lower.Contains("password"))
-                return "Use a passphrase or a password manager. Enable multi-factor authentication wherever possible.";
-            if (lower.Contains("help") || lower.Contains("how"))
-                return "Tell me what you're trying to do and I'll guide you step-by-step.";
-            return "Thanks — I received that. For detailed guidance you can ask about phishing, passwords, MFA, or secure browsing.";
+                if (result == MessageBoxResult.Yes)
+                {
+                    Application.Current?.Shutdown();
+                    return null;
+                }
+                else
+                {
+                    // humorous reassurance from bot when user decides to stay
+                    return "Phew — I'm glad you decided to stay! I've got more cybersecurity tips and witty remarks ready.";
+                }
+            }
+
+            if (TipBrowser.HasTopic(userMessage))
+            {
+                return TipBrowser.BrowseTips(userMessage, userName);
+            }
+            else
+            {
+                return BotResponses.GetBotResponse(userMessage, userName);
+            }
+        }
+
+        private void ConversationList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            var selectedItem = ConversationList.SelectedItem;
+            if (selectedItem is string selectedText && !string.IsNullOrEmpty(selectedText))
+            {
+                // we are just going to add the selected category as a user message and then generate a bot reply based on that category
+                Actions.AddMessage(selectedText, true, MessagesList);
+                var botReply = GenerateBotReply(selectedText);
+                Actions.AddMessage(botReply, false, MessagesList);
+            }
+        }
+
+
+
+        private void ExitButton_Click(object sender, RoutedEventArgs e)
+        {
+            // Ask user to confirm exit
+            var result = MessageBox.Show(
+                "Are you sure you want to exit?",
+                "Confirm Exit",
+                MessageBoxButton.YesNo,
+                MessageBoxImage.Question);
+
+            if (result == MessageBoxResult.Yes)
+            {
+                // Close the application
+                Application.Current?.Shutdown();
+            }
+            else
+            {
+                // User chose not to exit - bot adds a reassuring message to the conversation list
+                Actions.AddMessage("Glad you want to hear some more...", false, MessagesList);
+            }
+        }
+
+        private void NewConversationButton_Click(object sender, RoutedEventArgs e)
+        {
+            // a) Clear UI fields
+            MessagesList.Items.Clear();
+            InputTextBox.Clear();
+
+            // b) Prompt the user with guidance for starting a new conversation
+            Actions.AddMessage("Please choose a topic from the sidebar or type any of the available topics to begin.", false, MessagesList);
+
+            // c) Give focus to the input box for convenience
+            InputTextBox.Focus();
         }
     }
 }
