@@ -28,3 +28,5 @@ Extending the bot
 License & notes
 - Lightweight demo for learning and prototyping. Adapt and extend the code for production use with proper security and privacy controls.
 
+youTube video:
+(https://youtu.be/RT5QIVVAgEQ) 
